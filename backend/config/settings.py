@@ -4,18 +4,27 @@ Django settings for config project.
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
+# =========================
 # BASE DIR
+# =========================
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+# =========================
 # SECURITY
+# =========================
 SECRET_KEY = 'django-insecure-kld2xp!@ido0=8wv2&0#f&7lv8%0y7496_(re-4td_8j&5dick'
-DEBUG = True
-ALLOWED_HOSTS = []
+
+DEBUG = True  # change to False in production
+
+ALLOWED_HOSTS = ['*']  # allow all (Render)
 
 
+# =========================
 # INSTALLED APPS
+# =========================
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -33,10 +42,13 @@ INSTALLED_APPS = [
 ]
 
 
+# =========================
 # MIDDLEWARE
+# =========================
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',   # must be at top
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # for static files
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -46,10 +58,15 @@ MIDDLEWARE = [
 ]
 
 
+# =========================
+# URL CONFIG
+# =========================
 ROOT_URLCONF = 'config.urls'
 
 
+# =========================
 # TEMPLATES
+# =========================
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -66,10 +83,15 @@ TEMPLATES = [
 ]
 
 
+# =========================
+# WSGI
+# =========================
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
+# =========================
 # DATABASE
+# =========================
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -78,7 +100,9 @@ DATABASES = {
 }
 
 
+# =========================
 # PASSWORD VALIDATION
+# =========================
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -87,19 +111,26 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+# =========================
 # INTERNATIONALIZATION
+# =========================
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 
+# =========================
 # STATIC FILES
+# =========================
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # =========================
-# 🔐 JWT CONFIG
+# JWT CONFIG
 # =========================
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
@@ -107,7 +138,7 @@ SIMPLE_JWT = {
 
 
 # =========================
-# 🔐 DRF CONFIG
+# DRF CONFIG
 # =========================
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -117,6 +148,6 @@ REST_FRAMEWORK = {
 
 
 # =========================
-# 🌐 CORS CONFIG
+# CORS CONFIG
 # =========================
 CORS_ALLOW_ALL_ORIGINS = True
